@@ -15,7 +15,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "co.icanteach.apps.android.composenotes.ComposeNotesTestRunner"
         vectorDrawables {
             useSupportLibrary true
         }
@@ -74,4 +74,13 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
 
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
+
+    // Test rules and transitive dependencies:
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$compose_version")
+    // Needed for createComposeRule, but not createAndroidComposeRule:
+    debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_version")
+
+    // For instrumented tests.
+    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.38.1'
+    kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.40'
 }
