@@ -137,7 +137,7 @@ fun DetailScreen(
                     .fillMaxSize()
                     .padding(14.dp, 3.dp, 14.dp, 50.dp)
                     .onFocusChanged { focusState ->
-                        viewModel.onEvent(DetailPageEvent.ChangeContentFocus(focusState = focusState))
+                        //viewModel.onEvent(DetailPageEvent.ChangeContentFocus(focusState = focusState))
                     }
             )
         }
