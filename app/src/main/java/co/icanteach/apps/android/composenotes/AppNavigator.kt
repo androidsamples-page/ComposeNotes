@@ -25,6 +25,7 @@ fun AppNavigator() {
             route = Screens.DetailScreen.route
         ) {
             DetailScreen(
+                navController = navController
             )
         }
     }
