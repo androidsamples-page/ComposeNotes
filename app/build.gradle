@@ -63,4 +63,7 @@ dependencies {
 
     implementation "com.google.dagger:hilt-android:2.40"
     kapt "com.google.dagger:hilt-compiler:2.40"
+
+    def nav_version = "2.4.1"
+    implementation "androidx.navigation:navigation-compose:$nav_version"
 }
