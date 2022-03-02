@@ -2,44 +2,55 @@ package co.icanteach.apps.android.composenotes.detail
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.icanteach.apps.android.composenotes.data.Note
 import co.icanteach.apps.android.composenotes.detail.domain.CreateNoteUseCase
+import co.icanteach.apps.android.composenotes.detail.domain.DeleteNoteUseCase
+import co.icanteach.apps.android.composenotes.detail.domain.GetNoteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    val createNoteUseCase: CreateNoteUseCase,
+    private val createNoteUseCase: CreateNoteUseCase,
+    private val getNoteUseCase: GetNoteUseCase,
+    private val deleteNoteUseCase: DeleteNoteUseCase,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val _noteContent = mutableStateOf(NoteTextFieldState(
-        hint = "Enter some content"
-    ))
-
+    private val note: Note = Note.Default
+    private val _pageState = mutableStateOf(DetailPageViewState(note = note))
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
+    val pageState: State<DetailPageViewState> = _pageState
 
-    val noteContent: State<NoteTextFieldState> = _noteContent
+    init {
+        savedStateHandle.get<Int>("noteId")?.let { noteId ->
+            getNote(noteId)
+        }
+    }
+
+    private fun getNote(noteId: Int) {
+        viewModelScope.launch {
+            val result = getNoteUseCase.getNote(noteId)
+            _pageState.value = pageState.value.copy(note = result)
+        }
+    }
 
     fun onEvent(event: DetailPageEvent) {
         when (event) {
 
             is DetailPageEvent.EnteredContent -> {
-                _noteContent.value = _noteContent.value.copy(
-                    text = event.value
+                _pageState.value = pageState.value.copy(
+                    note = note.copy(content = event.value)
                 )
             }
             is DetailPageEvent.ChangeContentFocus -> {
-                _noteContent.value = _noteContent.value.copy(
-                    isHintVisible = !event.focusState.isFocused &&
-                            _noteContent.value.text.isBlank()
-                )
             }
 
             is DetailPageEvent.SaveNote -> {
@@ -47,22 +58,16 @@ class DetailViewModel @Inject constructor(
             }
 
             is DetailPageEvent.DeleteNote -> {
-
+                deleteNote()
             }
         }
     }
 
-    private fun saveNote() {
+    private fun deleteNote() {
         viewModelScope.launch {
             try {
-                createNoteUseCase.createNote(
-                    Note(
-                        content = noteContent.value.text,
-                        timestamp = System.currentTimeMillis(),
-                        id = 1
-                    )
-                )
-                _eventFlow.emit(UiEvent.SaveNote)
+                deleteNoteUseCase.deleteNote(note = note)
+                _eventFlow.emit(UiEvent.ClosePage)
             } catch (e: Exception) {
                 _eventFlow.emit(
                     UiEvent.ShowError(
@@ -73,8 +78,23 @@ class DetailViewModel @Inject constructor(
         }
     }
 
+    private fun saveNote() {
+        viewModelScope.launch {
+            try {
+                createNoteUseCase.createNote(
+                    note = note.copy(
+                        content = pageState.value.note.content,
+                        timestamp = System.currentTimeMillis()
+                    )
+                )
+                _eventFlow.emit(UiEvent.ClosePage)
+            } catch (e: Exception) {
+            }
+        }
+    }
+
     sealed class UiEvent {
         data class ShowError(val message: String) : UiEvent()
-        object SaveNote : UiEvent()
+        object ClosePage : UiEvent()
     }
 }

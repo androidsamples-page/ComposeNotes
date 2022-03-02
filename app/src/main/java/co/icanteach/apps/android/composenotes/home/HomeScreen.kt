@@ -1,5 +1,6 @@
 package co.icanteach.apps.android.composenotes.home
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -61,9 +63,14 @@ fun HomeScreen(
                     maxColumnWidth = 280.dp,
                 ) {
                     notesState.notes.forEachIndexed { index, keepNote ->
-                        SimpleNoteListItem(
+                        NoteListItem(
                             note = keepNote,
-                            onNoteClicked = { }
+                            onNoteClicked = { noteId ->
+                                navController.navigate(
+                                    Screens.DetailScreen.route +
+                                            "?noteId=${noteId}"
+                                )
+                            }
                         )
                     }
                 }
@@ -73,18 +80,22 @@ fun HomeScreen(
 }
 
 @Composable
-fun SimpleNoteListItem(
+fun NoteListItem(
     note: Note,
     onNoteClicked: (Int) -> Unit,
 ) {
     val shape = RoundedCornerShape(12.dp)
     Surface(
         shape = shape,
+        color = colorResource(
+            id = note.color
+        ),
         elevation = 0.dp,
         modifier = Modifier
             .padding(bottom = 8.dp, end = 4.dp, start = 4.dp)
             .clip(shape)
             .clickable {
+                onNoteClicked(note.id ?: 0)
             }
     ) {
         Column(
@@ -92,7 +103,6 @@ fun SimpleNoteListItem(
                 .fillMaxWidth()
                 .padding(16.dp),
         ) {
-
 
             Text(
                 text = note.content,

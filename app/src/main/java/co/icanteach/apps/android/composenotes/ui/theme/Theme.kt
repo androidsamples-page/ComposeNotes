@@ -9,26 +9,32 @@ import androidx.compose.runtime.Composable
 private val DarkColorPalette = darkColors(
     primary = Purple200,
     primaryVariant = Purple700,
-    secondary = Teal200
+    secondary = Teal200,
+    background = blueBGNight,
+    surface = pinkText,
+    onSurface = cardNight
 )
 
 private val LightColorPalette = lightColors(
     primary = Purple500,
     primaryVariant = Purple700,
-    secondary = Teal200
+    secondary = Teal200,
+    background = blueBG,
+    surface = blueText,
+    onSurface = card
 
     /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
+background = Color.White,
+surface = Color.White,
+onPrimary = Color.White,
+onSecondary = Color.Black,
+onBackground = Color.Black,
+onSurface = Color.Black,
+*/
 )
 
 @Composable
-fun ComposeNotesTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun ComposeNotesTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {
@@ -37,8 +43,8 @@ fun ComposeNotesTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Comp
 
     MaterialTheme(
         colors = colors,
-        typography = Typography,
-        shapes = Shapes,
+        typography = typography,
+        shapes = shapes,
         content = content
     )
 }

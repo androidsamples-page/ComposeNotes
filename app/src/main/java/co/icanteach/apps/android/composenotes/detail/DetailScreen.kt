@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,8 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import co.icanteach.apps.android.composenotes.R
@@ -37,7 +41,7 @@ fun DetailScreen(
     viewModel: DetailViewModel = hiltViewModel(),
 ) {
 
-    val contentState = viewModel.noteContent.value
+    val pageState = viewModel.pageState.value
     val scaffoldState = rememberScaffoldState()
 
     LaunchedEffect(key1 = true) {
@@ -48,7 +52,7 @@ fun DetailScreen(
                         message = event.message
                     )
                 }
-                is DetailViewModel.UiEvent.SaveNote -> {
+                is DetailViewModel.UiEvent.ClosePage -> {
                     navController.navigateUp()
                 }
             }
@@ -88,9 +92,10 @@ fun DetailScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = "Last updated $1",
+                            text = "Last updated ${pageState.note.timestamp}",
                             textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.overline
+                            style = MaterialTheme.typography.overline,
+                            modifier = Modifier.padding(horizontal = 8.dp)
                         )
 
                         Row(
@@ -108,7 +113,7 @@ fun DetailScreen(
                             }
                             IconButton(
                                 onClick = {
-                                    viewModel.onEvent(DetailPageEvent.SaveNote)
+                                    viewModel.onEvent(DetailPageEvent.DeleteNote)
                                 },
                             ) {
                                 Icon(
@@ -126,8 +131,10 @@ fun DetailScreen(
         scaffoldState = scaffoldState) {
 
         Column {
+
+            Spacer(modifier = Modifier.height(8.dp))
             BasicTextField(
-                value = contentState.text,
+                value = pageState.note.content,
                 onValueChange = { newText ->
                     viewModel.onEvent(DetailPageEvent.EnteredContent(newText))
                 },

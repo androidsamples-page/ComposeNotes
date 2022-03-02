@@ -2,12 +2,13 @@ package co.icanteach.apps.android.composenotes.data
 
 import javax.inject.Inject
 
-class NoteMapper @Inject constructor()  {
+class NoteMapper @Inject constructor() {
 
     fun mapFrom(note: Note): NoteEntity {
         return NoteEntity(
             content = note.content,
             timestamp = note.timestamp,
+            color = note.color
         )
     }
 
@@ -15,7 +16,8 @@ class NoteMapper @Inject constructor()  {
         return Note(
             content = note.content,
             timestamp = note.timestamp,
-            id = note.id ?: -1
+            id = note.id ?: -1,
+            color = note.color
         )
     }
 
@@ -24,7 +26,8 @@ class NoteMapper @Inject constructor()  {
             Note(
                 content = note.content,
                 timestamp = note.timestamp,
-                id = note.id ?: -1
+                id = note.id ?: -1,
+                color = note.color
             )
         }
     }

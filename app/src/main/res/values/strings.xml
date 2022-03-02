@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Compose Notes</string>
+    <string name="detail_page_desc">Enter some content</string>
 </resources>
