@@ -7,7 +7,7 @@ data class Note(
     val content: String,
     val timestamp: Long,
     val color: Int,
-    val id: Int,
+    val id: Int? = null,
 ) {
     companion object {
         private val colors = listOf(
@@ -16,16 +16,20 @@ data class Note(
             R.color.card_color_3,
             R.color.card_color_4,
             R.color.card_color_5,
-            R.color.card_color_6
+            R.color.card_color_6,
+            R.color.card_color_7,
+            R.color.card_color_8,
+            R.color.card_color_9,
+            R.color.card_color_10,
+            R.color.card_color_11
         )
 
-        fun getColor() = colors.shuffled().last()
+        private fun getColor() = colors.random()
 
         val Default = Note(
             content = "",
             timestamp = System.currentTimeMillis(),
-            color = getColor(),
-            id = 0
+            color = getColor()
         )
     }
 }

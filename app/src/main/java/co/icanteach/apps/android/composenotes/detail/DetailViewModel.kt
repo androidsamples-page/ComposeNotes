@@ -23,8 +23,7 @@ class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val note: Note = Note.Default
-    private val _pageState = mutableStateOf(DetailPageViewState(note = note))
+    private val _pageState = mutableStateOf(DetailPageViewState(note = Note.Default))
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
     val pageState: State<DetailPageViewState> = _pageState
@@ -46,8 +45,9 @@ class DetailViewModel @Inject constructor(
         when (event) {
 
             is DetailPageEvent.EnteredContent -> {
+                val oldNote = pageState.value.note
                 _pageState.value = pageState.value.copy(
-                    note = note.copy(content = event.value)
+                    note = oldNote.copy(content = event.value)
                 )
             }
             is DetailPageEvent.ChangeContentFocus -> {
@@ -66,7 +66,7 @@ class DetailViewModel @Inject constructor(
     private fun deleteNote() {
         viewModelScope.launch {
             try {
-                deleteNoteUseCase.deleteNote(note = note)
+                deleteNoteUseCase.deleteNote(note = pageState.value.note)
                 _eventFlow.emit(UiEvent.ClosePage)
             } catch (e: Exception) {
                 _eventFlow.emit(
@@ -82,7 +82,7 @@ class DetailViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 createNoteUseCase.createNote(
-                    note = note.copy(
+                    note = pageState.value.note.copy(
                         content = pageState.value.note.content,
                         timestamp = System.currentTimeMillis()
                     )

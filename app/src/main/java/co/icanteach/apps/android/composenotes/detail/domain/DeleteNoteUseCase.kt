@@ -5,7 +5,7 @@ import co.icanteach.apps.android.composenotes.data.NoteRepository
 import javax.inject.Inject
 
 class DeleteNoteUseCase @Inject constructor(
-    private val repository: NoteRepository,
+    private val repository: NoteRepository
 ) {
 
     suspend fun deleteNote(note: Note) {

@@ -23,12 +23,6 @@ class HomeViewModel @Inject constructor(
         getNotes()
     }
 
-    fun onEvent(event: HomePageEvent) {
-        when (event) {
-
-        }
-    }
-
     private fun getNotes() {
         getNotesUseCase.getNotes()
             .onEach { notes ->

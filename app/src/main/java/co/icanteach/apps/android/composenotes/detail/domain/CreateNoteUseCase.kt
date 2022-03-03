@@ -6,11 +6,11 @@ import co.icanteach.apps.android.composenotes.data.NoteRepository
 import javax.inject.Inject
 
 class CreateNoteUseCase @Inject constructor(
-    val repository: NoteRepository,
-    val mapper: NoteMapper,
+    private val repository: NoteRepository,
+    private val mapper: NoteMapper,
 ) {
 
     suspend fun createNote(note: Note) {
-        repository.insertNote(mapper.mapFrom(note = note))
+        repository.insertNote(mapper.map(note = note))
     }
 }

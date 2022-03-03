@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -60,6 +61,7 @@ fun HomeScreen(
 
             item {
                 StaggeredVerticalGrid(
+                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 4.dp),
                     maxColumnWidth = 280.dp,
                 ) {
                     notesState.notes.forEachIndexed { index, keepNote ->
@@ -82,7 +84,7 @@ fun HomeScreen(
 @Composable
 fun NoteListItem(
     note: Note,
-    onNoteClicked: (Int) -> Unit,
+    onNoteClicked: (Int?) -> Unit,
 ) {
     val shape = RoundedCornerShape(12.dp)
     Surface(
@@ -95,7 +97,7 @@ fun NoteListItem(
             .padding(bottom = 8.dp, end = 4.dp, start = 4.dp)
             .clip(shape)
             .clickable {
-                onNoteClicked(note.id ?: 0)
+                onNoteClicked(note.id)
             }
     ) {
         Column(

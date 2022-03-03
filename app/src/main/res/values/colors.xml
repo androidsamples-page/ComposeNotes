@@ -8,10 +8,15 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="card_color_1">#F5F5F5</color>
-    <color name="card_color_2">#FFADB0</color>
-    <color name="card_color_3">#FFEFC2</color>
-    <color name="card_color_4">#E5F5CC</color>
-    <color name="card_color_5">#C9E6F8</color>
-    <color name="card_color_6">#DFD7EA</color>
+    <color name="card_color_1">#F28B82</color>
+    <color name="card_color_2">#FBBC05</color>
+    <color name="card_color_3">#FFF475</color>
+    <color name="card_color_4">#CCFF90</color>
+    <color name="card_color_5">#A7FFEB</color>
+    <color name="card_color_6">#CBF0F8</color>
+    <color name="card_color_7">#AECBFA</color>
+    <color name="card_color_8">#D7AEFB</color>
+    <color name="card_color_9">#FDCFE8</color>
+    <color name="card_color_10">#E6C9A8</color>
+    <color name="card_color_11">#E8EAED</color>
 </resources>

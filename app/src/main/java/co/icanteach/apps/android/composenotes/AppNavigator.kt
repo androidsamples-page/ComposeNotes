@@ -23,6 +23,15 @@ fun AppNavigator() {
                 navController = navController
             )
         }
+
+        composable(
+            route = Screens.DetailScreen.route
+        ) {
+            DetailScreen(
+                navController = navController,
+            )
+        }
+
         composable(
             route = Screens.DetailScreen.route + "?noteId={noteId}",
             arguments = listOf(
@@ -30,7 +39,6 @@ fun AppNavigator() {
                     name = "noteId"
                 ) {
                     type = NavType.IntType
-                    defaultValue = -1
                 }
             )
         ) {

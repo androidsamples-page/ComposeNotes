@@ -13,6 +13,6 @@ class GetNoteUseCase @Inject constructor(
 
     suspend fun getNote(id: Int): Note {
         val result = repository.getNoteById(id)
-        return mapper.map(result ?: mapper.mapFrom(Note.Default))
+        return mapper.map(result ?: mapper.map(Note.Default))
     }
 }
