@@ -13,6 +13,7 @@ class NoteMapper @Inject constructor() {
         )
     }
 
+
     fun map(note: NoteEntity): Note {
         return Note(
             content = note.content,

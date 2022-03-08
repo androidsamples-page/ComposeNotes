@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Compose Notes</string>
     <string name="detail_page_desc">Enter some content</string>
+    <string name="last_updated_date_desc">Last updated : %s</string>
 </resources>

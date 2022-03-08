@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import co.icanteach.apps.android.composenotes.R
+import co.icanteach.apps.android.composenotes.util.DateFormatter
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -91,8 +92,12 @@ fun DetailScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier.fillMaxWidth()
                     ) {
+
+                        val lastUpdatedText =
+                            stringResource(R.string.last_updated_date_desc,
+                                DateFormatter.getFormattedDate(pageState.note.timestamp))
                         Text(
-                            text = "Last updated ${pageState.note.timestamp}",
+                            text = lastUpdatedText,
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.overline,
                             modifier = Modifier.padding(horizontal = 8.dp)
@@ -143,9 +148,6 @@ fun DetailScreen(
                     .weight(1f, true)
                     .fillMaxSize()
                     .padding(14.dp, 3.dp, 14.dp, 50.dp)
-                    .onFocusChanged { focusState ->
-                        //viewModel.onEvent(DetailPageEvent.ChangeContentFocus(focusState = focusState))
-                    }
             )
         }
     }

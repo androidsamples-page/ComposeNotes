@@ -1,8 +1,8 @@
 package co.icanteach.apps.android.composenotes.home
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,6 +29,7 @@ import androidx.navigation.NavController
 import co.icanteach.apps.android.composenotes.R
 import co.icanteach.apps.android.composenotes.Screens
 import co.icanteach.apps.android.composenotes.data.Note
+import co.icanteach.apps.android.composenotes.util.DateFormatter
 
 
 @Composable
@@ -55,10 +56,6 @@ fun HomeScreen(
         }
     ) {
         LazyColumn(content = {
-            item {
-                //crossFade between top bar and search bar
-            }
-
             item {
                 StaggeredVerticalGrid(
                     modifier = Modifier.padding(vertical = 8.dp, horizontal = 4.dp),
@@ -111,9 +108,14 @@ fun NoteListItem(
                 style = MaterialTheme.typography.body2,
             )
 
+            val lastUpdatedText =
+                stringResource(R.string.last_updated_date_desc,
+                    DateFormatter.getFormattedDate(note.timestamp))
+
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = note.timestamp.toString(),
-                style = MaterialTheme.typography.overline,
+                text = lastUpdatedText,
+                style = MaterialTheme.typography.caption,
                 modifier = Modifier.padding(bottom = 8.dp),
                 color = Color.Gray
             )

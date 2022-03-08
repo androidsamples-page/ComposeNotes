@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import co.icanteach.apps.android.composenotes.data.ColorGenerator
 import co.icanteach.apps.android.composenotes.data.Note
 import co.icanteach.apps.android.composenotes.detail.domain.CreateNoteUseCase
 import co.icanteach.apps.android.composenotes.detail.domain.DeleteNoteUseCase
@@ -84,7 +85,8 @@ class DetailViewModel @Inject constructor(
                 createNoteUseCase.createNote(
                     note = pageState.value.note.copy(
                         content = pageState.value.note.content,
-                        timestamp = System.currentTimeMillis()
+                        timestamp = System.currentTimeMillis(),
+                        color = ColorGenerator.getColor()
                     )
                 )
                 _eventFlow.emit(UiEvent.ClosePage)

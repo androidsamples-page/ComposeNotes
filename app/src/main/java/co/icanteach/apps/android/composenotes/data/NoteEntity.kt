@@ -10,4 +10,12 @@ data class NoteEntity(
     val color: Int,
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null,
-)
+) {
+    companion object {
+        val Default = NoteEntity(
+            content = "",
+            timestamp = System.currentTimeMillis(),
+            color = ColorGenerator.getColor()
+        )
+    }
+}

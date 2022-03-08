@@ -3,7 +3,6 @@ package co.icanteach.apps.android.composenotes.detail.domain
 import co.icanteach.apps.android.composenotes.data.Note
 import co.icanteach.apps.android.composenotes.data.NoteMapper
 import co.icanteach.apps.android.composenotes.data.NoteRepository
-import java.lang.Exception
 import javax.inject.Inject
 
 class GetNoteUseCase @Inject constructor(
