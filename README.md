@@ -7,7 +7,7 @@ A demo app using compose and Hilt based on modern Android tech-stacks and MVVM a
 ## Download
 
 ## Screenshots
-
+<img src="/screenshots/home_page.png" width="260"> &emsp;<img src="/screenshots/detail_page.png" width="260">
 
 ## Tech stack & Open-source libraries
 - 100% [Kotlin](https://kotlinlang.org/) based + [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/) for asynchronous.
