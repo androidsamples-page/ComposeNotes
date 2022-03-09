@@ -95,7 +95,8 @@ fun DetailScreen(
 
                         val lastUpdatedText =
                             stringResource(R.string.last_updated_date_desc,
-                                DateFormatter.getFormattedDate(pageState.note.timestamp))
+                                DateFormatter.getFormattedDate(pageState.note.timestamp,
+                                    DateFormatter.Format.DAY_HOUR_FORMAT))
                         Text(
                             text = lastUpdatedText,
                             textAlign = TextAlign.Center,

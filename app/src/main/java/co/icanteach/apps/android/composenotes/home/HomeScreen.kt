@@ -110,7 +110,8 @@ fun NoteListItem(
 
             val lastUpdatedText =
                 stringResource(R.string.last_updated_date_desc,
-                    DateFormatter.getFormattedDate(note.timestamp))
+                    DateFormatter.getFormattedDate(note.timestamp,
+                        DateFormatter.Format.ONLY_DAY_FORMAT))
 
             Spacer(modifier = Modifier.height(8.dp))
             Text(
