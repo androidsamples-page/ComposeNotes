@@ -11,9 +11,12 @@ import co.icanteach.apps.android.composenotes.detail.domain.CreateNoteUseCase
 import co.icanteach.apps.android.composenotes.detail.domain.DeleteNoteUseCase
 import co.icanteach.apps.android.composenotes.detail.domain.GetNoteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.lang.IllegalStateException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,8 +28,8 @@ class DetailViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _pageState = mutableStateOf(DetailPageViewState(note = Note.Default))
-    private val _eventFlow = MutableSharedFlow<UiEvent>()
-    val eventFlow = _eventFlow.asSharedFlow()
+    private val _eventFlow = Channel<UiEvent>(Channel.BUFFERED)
+    val eventFlow = _eventFlow.receiveAsFlow()
     val pageState: State<DetailPageViewState> = _pageState
 
     init {
@@ -68,9 +71,9 @@ class DetailViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 deleteNoteUseCase.deleteNote(note = pageState.value.note)
-                _eventFlow.emit(UiEvent.ClosePage)
+                _eventFlow.send(UiEvent.ClosePage)
             } catch (e: Exception) {
-                _eventFlow.emit(
+                _eventFlow.send(
                     UiEvent.ShowError(
                         message = e.message ?: "Couldn't save note"
                     )
@@ -89,7 +92,7 @@ class DetailViewModel @Inject constructor(
                         color = ColorGenerator.getColor()
                     )
                 )
-                _eventFlow.emit(UiEvent.ClosePage)
+                _eventFlow.send(UiEvent.ClosePage)
             } catch (e: Exception) {
             }
         }
