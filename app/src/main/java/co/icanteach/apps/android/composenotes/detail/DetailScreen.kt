@@ -57,22 +57,37 @@ fun DetailScreen(
     }
 
     Scaffold(
-        topBar = { DetailScreenTopBar(navController = navController) },
-        bottomBar = { DetailScreenBottomBar(pageState = pageState, viewModel = viewModel) },
+        topBar = { DetailScreenTopBar(onIconClick = { navController.navigateUp() }) },
+        bottomBar = {
+            DetailScreenBottomBar(
+                timestamp = pageState.note.timestamp,
+                onSaveClick = {
+                    viewModel.onEvent(DetailPageEvent.SaveNote)
+                },
+                onDeleteClick = {
+                    viewModel.onEvent(DetailPageEvent.DeleteNote)
+                }
+            )
+        },
         scaffoldState = scaffoldState
     ) {
-        DetailScreenBody(pageState = pageState, viewModel = viewModel)
+        DetailScreenBody(
+            noteContent = pageState.note.content,
+            onNoteContentChange = { newText ->
+                viewModel.onEvent(DetailPageEvent.EnteredContent(newText))
+            }
+        )
     }
 }
 
 @Composable
 fun DetailScreenTopBar(
-    navController: NavController,
+    onIconClick: () -> Unit,
 ) {
     TopAppBar(
         title = {},
         navigationIcon = {
-            IconButton(onClick = { navController.navigateUp() }) {
+            IconButton(onClick = onIconClick) {
                 Icon(
                     painterResource(id = R.drawable.ic_back),
                     contentDescription = stringResource(id = R.string.app_name),
@@ -86,8 +101,9 @@ fun DetailScreenTopBar(
 
 @Composable
 fun DetailScreenBottomBar(
-    pageState: DetailPageViewState,
-    viewModel: DetailViewModel,
+    timestamp: Long,
+    onSaveClick: () -> Unit,
+    onDeleteClick: () -> Unit,
 ) {
     BottomAppBar(
         modifier = Modifier.height(46.dp),
@@ -104,7 +120,7 @@ fun DetailScreenBottomBar(
                     stringResource(
                         R.string.last_updated_date_desc,
                         DateFormatter.getFormattedDate(
-                            pageState.note.timestamp,
+                            timestamp,
                             DateFormatter.Format.DAY_HOUR_FORMAT
                         )
                     )
@@ -115,7 +131,7 @@ fun DetailScreenBottomBar(
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
 
-                DetailScreenBottomBarIcons(viewModel = viewModel)
+                DetailScreenBottomBarIcons(onSaveClick = onSaveClick, onDeleteClick = onDeleteClick)
             }
         }
     )
@@ -123,16 +139,17 @@ fun DetailScreenBottomBar(
 
 @Composable
 fun DetailScreenBottomBarIcons(
-    viewModel: DetailViewModel,
+    onSaveClick: () -> Unit,
+    onDeleteClick: () -> Unit,
 ) {
     Row(horizontalArrangement = Arrangement.End) {
-        IconButton(onClick = { viewModel.onEvent(DetailPageEvent.SaveNote) }) {
+        IconButton(onClick = onSaveClick) {
             Icon(
                 painterResource(id = R.drawable.ic_check),
                 contentDescription = stringResource(id = R.string.app_name),
             )
         }
-        IconButton(onClick = { viewModel.onEvent(DetailPageEvent.DeleteNote) }) {
+        IconButton(onClick = onDeleteClick) {
             Icon(
                 painterResource(id = R.drawable.ic_trash),
                 contentDescription = stringResource(id = R.string.app_name),
@@ -143,16 +160,14 @@ fun DetailScreenBottomBarIcons(
 
 @Composable
 fun DetailScreenBody(
-    pageState: DetailPageViewState,
-    viewModel: DetailViewModel,
+    noteContent: String,
+    onNoteContentChange: (String) -> Unit,
 ) {
     Column {
         Spacer(modifier = Modifier.height(8.dp))
         BasicTextField(
-            value = pageState.note.content,
-            onValueChange = { newText ->
-                viewModel.onEvent(DetailPageEvent.EnteredContent(newText))
-            },
+            value = noteContent,
+            onValueChange = onNoteContentChange,
             textStyle = MaterialTheme.typography.subtitle1,
             modifier = Modifier
                 .weight(weight = 1f, fill = true)
